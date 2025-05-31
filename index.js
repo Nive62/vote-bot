@@ -47,8 +47,5 @@ async function voter() {
   }
 }
 
-// Vote immédiat au lancement
 voter();
-
-// Vote automatique toutes les 1h01
 setInterval(voter, 61 * 60 * 1000);
