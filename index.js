@@ -37,10 +37,12 @@ async function voter() {
     await page.type('#pseudo', 'Bapt62');
     await page.click('#submit-button');
 
+    // attendre 30 secondes après le clic
+    await new Promise(resolve => setTimeout(resolve, 30000));
+
     lastVoteTime = new Date();
     console.log(`✅ Vote envoyé à ${lastVoteTime.toLocaleString()}`);
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
     await browser.close();
   } catch (err) {
     console.error('❌ Erreur pendant le vote :', err);
