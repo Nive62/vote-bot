@@ -1,8 +1,7 @@
 
-# Utilise l'image officielle Node.js
 FROM node:20-slim
 
-# Installe les dépendances nécessaires à Puppeteer
+# Dépendances pour Puppeteer
 RUN apt-get update && apt-get install -y \
   wget \
   ca-certificates \
@@ -24,14 +23,11 @@ RUN apt-get update && apt-get install -y \
   libgbm-dev \
   && rm -rf /var/lib/apt/lists/*
 
-# Crée le dossier de travail
 WORKDIR /app
 
-# Copie les fichiers
 COPY package*.json ./
 RUN npm install
 
 COPY . .
 
-# Démarre le script
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

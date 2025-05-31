@@ -16,7 +16,7 @@ async function voter() {
     await page.type('#pseudo', 'Bapt62');
     await page.click('#submit-button');
 
-    // Petite attente après le clic
+    // Attente après le clic
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     console.log("✔️ Vote tenté à", new Date().toLocaleTimeString());
