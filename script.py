@@ -123,7 +123,7 @@ if __name__ == "__main__":
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--mute-audio")
 
-    driver = uc.Chrome(options=options, driver_executable_path="/usr/bin/chromedriver")
+    driver = uc.Chrome(options=options)
 
     driver.get(ip)
     vote()
