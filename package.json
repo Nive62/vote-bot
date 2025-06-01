@@ -1,13 +1,12 @@
-
 {
   "name": "vote-bot",
   "version": "1.0.0",
-  "description": "Vote bot MonCube",
+  "description": "Bot automatique de vote",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "puppeteer": "^21.3.8"
+    "puppeteer": "^21.0.0"
   }
 }
