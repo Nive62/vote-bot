@@ -80,7 +80,7 @@ def vote():
         log("Vote en cours")
         pseudo = driver.find_element(By.ID, 'pseudo') 
         pseudo.send_keys(pseudo_vote)
-        
+
         time.sleep(random.randint(500, 2500) / 1000)
 
         valider = driver.find_element(By.ID, "submit-button")
@@ -98,7 +98,7 @@ def vote():
             time.sleep(3)
             driver.refresh()
             time.sleep(5)
-            
+
             wait()
     except NoSuchElementException:
         log("Erreur NoSuchElementException vote() (vote déjà effectué)")
