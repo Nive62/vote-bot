@@ -105,12 +105,12 @@ def vote():
 log("Démarrage")
 
 options = webdriver.ChromeOptions()
-options.binary_location = "/usr/bin/chromium"
+options.binary_location = "/snap/bin/chromium"
 options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(options=options, executable_path="/snap/bin/chromedriver")
 
 driver.get(ip)
 vote()
