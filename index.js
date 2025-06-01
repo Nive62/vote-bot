@@ -36,7 +36,5 @@ async function voter() {
   }
 }
 
-// Premier vote
 voter();
-// Puis toutes les heures
 setInterval(voter, 61 * 60 * 1000);
