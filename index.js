@@ -1,4 +1,10 @@
 const puppeteer = require('puppeteer');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 8080;
+
+app.get("/", (req, res) => res.send("Vote bot is running"));
+app.listen(port, () => console.log(`🌐 Serveur en ligne sur le port ${port}`));
 
 async function voter() {
   const heure = new Date().toLocaleString();
@@ -20,7 +26,6 @@ async function voter() {
     await page.type('#pseudo', 'Bapt62');
     await page.click('#submit-button');
 
-    // ✅ Attente de l’apparition du message de vote validé
     await page.waitForSelector('#vote-validated', { timeout: 10000 });
 
     console.log(`✅ Vote confirmé à ${heure}`);
@@ -31,11 +36,7 @@ async function voter() {
   }
 }
 
-// ✅ Premier vote immédiat
+// Premier vote
 voter();
-
-// ✅ Puis toutes les 1h01
+// Puis toutes les heures
 setInterval(voter, 61 * 60 * 1000);
-
-// ✅ Garde le conteneur actif
-setInterval(() => {}, 1 << 30);
