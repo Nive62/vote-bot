@@ -5,21 +5,27 @@ import re
 import random
 import time
 import sys
+import urllib.request
+import zipfile
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import NoSuchElementException
 
+# ───── Téléchargement de Chromedriver ─────
+def download_chromedriver():
+    if not os.path.exists("chromedriver"):
+        print("Téléchargement de chromedriver...")
+        url = "https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chromedriver-linux64.zip"
+        urllib.request.urlretrieve(url, "chromedriver.zip")
+        with zipfile.ZipFile("chromedriver.zip", "r") as zip_ref:
+            zip_ref.extractall(".")
+        os.rename("chromedriver-linux64/chromedriver", "chromedriver")
+        os.chmod("chromedriver", 0o755)
+        print("Chromedriver prêt.")
 
-# ───── Installation Chromium (Railway) ─────
-def installer_chromium():
-    print("Installation de Chromium et Chromedriver...")
-    subprocess.run(["apt-get", "update"], check=True)
-    subprocess.run(["apt-get", "install", "-y", "chromium", "chromium-driver"], check=True)
-    print("Chromium installé")
-
-installer_chromium()
+download_chromedriver()
 
 # ───── Variables Globales ─────
 pseudo_vote = "Bapt62"
@@ -107,14 +113,12 @@ def vote():
 log("Démarrage")
 
 options = webdriver.ChromeOptions()
-options.binary_location = "/snap/bin/chromium"
 options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
-service = Service("/snap/bin/chromedriver")
+service = Service("./chromedriver")
 driver = webdriver.Chrome(service=service, options=options)
-
 
 driver.get(ip)
 vote()
