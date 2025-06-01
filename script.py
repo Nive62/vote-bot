@@ -6,17 +6,16 @@ import random
 import time
 import sys
 from datetime import datetime
-from selenium.common.exceptions import NoSuchElementException
+from selenium import webdriver
 from selenium.webdriver.common.by import By
-import undetected_chromedriver as uc
+from selenium.common.exceptions import NoSuchElementException
 
 # ───── Installation Chromium (Railway) ─────
 def installer_chromium():
-    if not os.path.exists("/usr/bin/chromium-browser"):
-        print("Installation de Chromium...")
-        subprocess.run(["apt-get", "update"], check=True)
-        subprocess.run(["apt-get", "install", "-y", "chromium", "chromium-driver"], check=True)
-        print("Chromium installé")
+    print("Installation de Chromium et Chromedriver...")
+    subprocess.run(["apt-get", "update"], check=True)
+    subprocess.run(["apt-get", "install", "-y", "chromium", "chromium-driver"], check=True)
+    print("Chromium installé")
 
 installer_chromium()
 
@@ -29,13 +28,6 @@ def log(text):
     now = datetime.now()
     date = now.strftime("%d/%m/%Y à %H:%M:%S")
     print("["+date+"] : "+text)
-
-def take_screenshot(step_name):
-    now = datetime.now()
-    date = now.strftime("%d%m%Y_%H%M%S")
-    filename = f"screenshot_{step_name}_{date}.png"
-    driver.save_screenshot(filename)
-    log(f"Capture d'écran prise : {filename}")
 
 def wait():
     time.sleep(3)
@@ -52,7 +44,6 @@ def wait():
             minutes = int(match.group(2))
             seconds = int(match.group(3))
 
-            log(f"Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}")
             total_seconds = hours * 3600 + minutes * 60 + seconds
             log(f"Temps total en secondes: {total_seconds}")
 
@@ -60,25 +51,25 @@ def wait():
                 time.sleep(total_seconds)
                 vote()
             except KeyboardInterrupt:
-                log("Interruption programme 1 ")
+                log("Interruption programme 1")
                 sys.exit()
             except Exception as e:
-                log("Erreur "+str(e)+" tentative de vote à nouveau...")
+                log("Erreur "+str(e)+", tentative de vote à nouveau...")
                 vote()
     except NoSuchElementException:
-        log("Erreur NoSuchElementException wait(), retentative de vote...")
+        log("Erreur NoSuchElementException wait(), tentative de vote...")
         vote()
     except KeyboardInterrupt:
         log("Interruption programme 3")
         sys.exit()
     except Exception as e:
-        log("Erreur inconnue wait() : "+str(e))
+        log("Erreur inconnue wait(): "+str(e))
         vote()
 
 def vote():
     try:
         log("Vote en cours")
-        pseudo = driver.find_element(By.ID, 'pseudo') 
+        pseudo = driver.find_element(By.ID, 'pseudo')
         pseudo.send_keys(pseudo_vote)
 
         time.sleep(random.randint(500, 2500) / 1000)
@@ -107,23 +98,19 @@ def vote():
         log("Interruption programme 3")
         sys.exit()
     except Exception as e:
-        log("Erreur "+str(e)+" vote() (vote déjà effectué ou autre)")
+        log("Erreur "+str(e)+" vote()")
         wait()
 
-# ───── Lancement du Bot ─────
-if __name__ == "__main__":
-    log("Démarrage")
+# ───── Démarrage Selenium ─────
+log("Démarrage")
 
-    options = uc.ChromeOptions()
-    options.binary_location = "/usr/bin/chromium-browser"
+options = webdriver.ChromeOptions()
+options.binary_location = "/usr/bin/chromium"
+options.add_argument("--headless=new")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--mute-audio")
+driver = webdriver.Chrome(options=options)
 
-    driver = uc.Chrome(options=options)
-
-    driver.get(ip)
-    vote()
+driver.get(ip)
+vote()
