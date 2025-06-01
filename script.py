@@ -9,6 +9,8 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service
+
 
 # ───── Installation Chromium (Railway) ─────
 def installer_chromium():
@@ -110,7 +112,9 @@ options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
-driver = webdriver.Chrome(options=options, executable_path="/snap/bin/chromedriver")
+service = Service("/snap/bin/chromedriver")
+driver = webdriver.Chrome(service=service, options=options)
+
 
 driver.get(ip)
 vote()
